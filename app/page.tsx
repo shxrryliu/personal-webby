@@ -37,7 +37,7 @@ const workSections: {
       bulletsTitle: "I’m working part-time to:",
       bullets: [
         "Redesign their core voter-facing experiences",
-        "Lead initiatives work across UX, product strategy, and product process",
+        "Lead initiatives across UX, product strategy, and product process",
         "Translate messy civic workflows into clear, usable interfaces for real voting groups.",
       ],
       footer: "More to come!",
