@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { StaggerFadeIn, FadeInSection } from "./stagger-fade-in";
 import { WorkCard } from "./WorkCard";
-import { MagnifyHero } from "./magnify-hero";
+import { MagnifyPage } from "./magnify-hero";
 import { StickyHeader } from "./sticky-header";
+import { MagnifyJar } from "./magnify-jar";
 
 const workSections: {
   title: string;
@@ -12,6 +13,7 @@ const workSections: {
   aspect?: string;
   hasExternalLink?: boolean;
   url?: string;
+  gradientColor?: string;
   details?: {
     summary: string;
     bulletsTitle?: string;
@@ -28,6 +30,7 @@ const workSections: {
     date: "Currently designing",
     image: "/images/sway.svg",
     aspect: "aspect-[3/1]",
+    gradientColor: "#ddd6e9",
     details: {
       summary:
         "Sway is a civic tech platform that helps groups of voters coordinate their ballots to create real political leverage.",
@@ -45,6 +48,7 @@ const workSections: {
     date: "Released Aug 2025",
     image: "/images/quiz.svg",
     aspect: "aspect-[3/1]",
+    gradientColor: "#d4dde9",
     details: {
       summary: "IXL's first user-authored content feature.",
       paragraphs: [
@@ -60,6 +64,7 @@ const workSections: {
     date: "Released Mar 2025",
     image: "/images/california.svg",
     aspect: "aspect-[3/1]",
+    gradientColor: "#d0ded4",
     details: {
       summary: "California Takeoff is the first digital core curriculum approved by the California Board of Education.",
       paragraphs: [
@@ -74,6 +79,7 @@ const workSections: {
     date: "Anywhere from 2021-2024",
     image: "/images/t4sg.svg",
     aspect: "aspect-[3/1]",
+    gradientColor: "#d2d5e2",
     details: {
       summary: "Led product and design across multiple years for Harvard's student-run tech-for-good organization.",
       paragraphs: [
@@ -88,12 +94,13 @@ const workSections: {
 
 export default function Home() {
   return (
+    <MagnifyPage>
     <main className="min-h-screen bg-cream">
       <StickyHeader targetId="hero" />
+      <MagnifyJar targetId="hero" />
       <StaggerFadeIn className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         {/* Hero Section */}
         <FadeInSection className="mb-20">
-          <MagnifyHero>
           <section id="hero">
             {/* Hero card with fibonacci spiral border */}
             <div className="relative rounded-lg bg-[url('/images/spiralbg.png')] bg-contain bg-no-repeat px-6 py-10 bg-[position:center_40px] md:bg-[position:center_-10px] md:px-10 md:py-10">
@@ -148,7 +155,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-          </MagnifyHero>
         </FadeInSection>
 
         {/* Work Sections */}
@@ -164,6 +170,7 @@ export default function Home() {
               aspect={work.aspect}
               hasExternalLink={work.hasExternalLink}
               url={work.url}
+              gradientColor={work.gradientColor}
               details={work.details}
             />
           </FadeInSection>
@@ -195,5 +202,6 @@ export default function Home() {
         </FadeInSection>
       </StaggerFadeIn>
     </main>
+    </MagnifyPage>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { ReactNode } from "react";
+import { motion } from "framer-motion";
+import { ReactNode, useEffect, useState } from "react";
 
 const containerVariants = {
   hidden: {},
@@ -27,6 +27,18 @@ const noMotion = {
   visible: { opacity: 1, y: 0 },
 };
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return reduced;
+}
+
 export function StaggerFadeIn({
   children,
   className,
@@ -34,7 +46,7 @@ export function StaggerFadeIn({
   children: ReactNode;
   className?: string;
 }) {
-  const prefersReduced = useReducedMotion();
+  const prefersReduced = usePrefersReducedMotion();
   const child = prefersReduced ? noMotion : childVariants;
 
   return (
@@ -62,7 +74,7 @@ export function FadeInSection({
   children: ReactNode;
   className?: string;
 }) {
-  const prefersReduced = useReducedMotion();
+  const prefersReduced = usePrefersReducedMotion();
   const child = prefersReduced ? noMotion : childVariants;
 
   return (

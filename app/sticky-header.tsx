@@ -1,24 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 export function StickyHeader({ targetId }: { targetId: string }) {
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
+  const update = useCallback(() => {
     const target = document.getElementById(targetId);
     if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisible(!entry.isIntersecting);
-      },
-      { threshold: 0 }
-    );
-
-    observer.observe(target);
-    return () => observer.disconnect();
+    const rect = target.getBoundingClientRect();
+    setVisible(rect.bottom < 0);
   }, [targetId]);
+
+  useEffect(() => {
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [update]);
 
   return (
     <header

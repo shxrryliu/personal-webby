@@ -25,6 +25,8 @@ export type WorkCardProps = {
 
   /** If present, card becomes expandable on click and collapses on mouse leave */
   details?: WorkCardDetails;
+  /** CSS color for the gradient end (bottom-right). Falls back to cream-dark if omitted. */
+  gradientColor?: string;
 };
 
 export function WorkCard({
@@ -35,6 +37,7 @@ export function WorkCard({
   hasExternalLink,
   url,
   details,
+  gradientColor,
 }: WorkCardProps) {
   const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
@@ -91,7 +94,14 @@ export function WorkCard({
       </div>
 
       {/* Card body (image + expandable details live within the same container) */}
-      <div className="overflow-hidden rounded-lg bg-cream-dark transition-shadow group-hover:shadow-md">
+      <div
+        className="overflow-hidden rounded-lg transition-shadow group-hover:shadow-md"
+        style={{
+          background: gradientColor
+            ? `linear-gradient(135deg, #e8e1d8 0%, ${gradientColor} 100%)`
+            : "#e8e1d8",
+        }}
+      >
         {image ? (
           <div className="pb-0">
             <Image
