@@ -73,7 +73,7 @@ const workSections: {
     image: "/images/t4sg.svg",
     aspect: "aspect-[3/1]",
     details: {
-      summary: "Led product and design across multiple semesters for Harvard's student-run tech-for-good organization.",
+      summary: "Led product and design across multiple years for Harvard's student-run tech-for-good organization.",
       paragraphs: [
         "Directed cross-functional student teams building software for nonprofits. Coordinated 70+ user interviews. Pioneered end-to-end product design lifecycle: scoping projects with partner orgs, running design sprints, conducting design reviews for project teams.",
         "Worked with partners including the ACLU, City of Boston, and local community organizations.",
@@ -92,12 +92,7 @@ export default function Home() {
         <FadeInSection className="mb-20">
           <section>
             {/* Hero card with fibonacci spiral border */}
-            <div className="relative rounded-lg px-6 py-10 md:px-10 md:py-14" style={{
-              backgroundImage: 'url(/images/spiralbg.png)',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}>
+            <div className="relative rounded-lg bg-[url('/images/spiralbg.png')] bg-contain bg-no-repeat px-6 py-10 bg-[position:center_40px] md:bg-[position:center_-10px] md:px-10 md:py-10">
               <div className="relative z-10">
               {/* Portfolio title */}
               <h1 className="mb-1 text-center font-serif text-5xl italic md:text-7xl">
@@ -172,12 +167,14 @@ export default function Home() {
             </div>
             <div className="space-y-1 sm:text-right">
               <p>
-                <a href="https://drive.google.com/file/d/14Ki6bSKAT2-WeS7banVjEOyyrCBfsuuq/view?usp=sharing" className="underline hover:text-charcoal-light">
+                <a href="https://drive.google.com/file/d/14Ki6bSKAT2-WeS7banVjEOyyrCBfsuuq/view?usp=sharing" 
+                target="_blank" rel="noopener noreferrer" className="underline hover:text-charcoal-light">
                   Resume
                 </a>
               </p>
               <p>
-                <a href="https://www.linkedin.com/in/sherry-liu-0183a7167/" className="underline hover:text-charcoal-light">
+                <a href="https://www.linkedin.com/in/sherry-liu-0183a7167/" target="_blank" rel="noopener noreferrer" 
+                className="underline hover:text-charcoal-light">
                   LinkedIn
                 </a>{" "}
                 (which you already have)
