@@ -173,7 +173,7 @@ export default function Home() {
             </div>
             <div className="space-y-1 sm:text-right">
               <p>
-                <a href="#" className="underline hover:text-charcoal-light">
+                <a href="https://drive.google.com/file/d/14Ki6bSKAT2-WeS7banVjEOyyrCBfsuuq/view?usp=sharing" className="underline hover:text-charcoal-light">
                   Resume
                 </a>
               </p>

@@ -20,8 +20,11 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Sherry Liu - Portfolio",
+  title: "Sherry's portfolio",
   description: "Product manager and designer creating better web UX for underserved communities.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
