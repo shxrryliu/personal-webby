@@ -2,6 +2,7 @@ import Image from "next/image";
 import { StaggerFadeIn, FadeInSection } from "./stagger-fade-in";
 import { WorkCard } from "./WorkCard";
 import { MagnifyHero } from "./magnify-hero";
+import { StickyHeader } from "./sticky-header";
 
 const workSections: {
   title: string;
@@ -88,11 +89,12 @@ const workSections: {
 export default function Home() {
   return (
     <main className="min-h-screen bg-cream">
+      <StickyHeader targetId="hero" />
       <StaggerFadeIn className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         {/* Hero Section */}
         <FadeInSection className="mb-20">
           <MagnifyHero>
-          <section>
+          <section id="hero">
             {/* Hero card with fibonacci spiral border */}
             <div className="relative rounded-lg bg-[url('/images/spiralbg.png')] bg-contain bg-no-repeat px-6 py-10 bg-[position:center_40px] md:bg-[position:center_-10px] md:px-10 md:py-10">
               <div className="relative z-10">
@@ -121,7 +123,7 @@ export default function Home() {
                       priority
                     />
                   </div>
-                  <p className="mt-1.5 text-[11px] text-charcoal-light">
+                  <p className="mt-1 text-[11px] text-charcoal-light">
                     <span className="group-data-[magnify-active]/magnify:hidden">try my magnifying glass?</span>
                     <span className="hidden group-data-[magnify-active]/magnify:inline">okay, you can give it back</span>
                   </p>
