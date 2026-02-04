@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState } from "react";
+import { useId } from "react";
+import { useExpandedCards } from "./expanded-cards-context";
 
 type WorkCardDetails = {
   summary: string;
@@ -39,7 +40,8 @@ export function WorkCard({
   details,
   gradientColor,
 }: WorkCardProps) {
-  const [expanded, setExpanded] = useState(false);
+  const { isExpanded, setExpanded: setCardExpanded } = useExpandedCards();
+  const expanded = isExpanded(title);
   const detailsId = useId();
 
   const isExpandable = Boolean(details);
@@ -57,14 +59,14 @@ export function WorkCard({
       onClick={
         isExpandable
           ? () => {
-              setExpanded(true);
+              setCardExpanded(title, true);
             }
           : undefined
       }
       onMouseLeave={
         isExpandable
           ? () => {
-              setExpanded(false);
+              setCardExpanded(title, false);
             }
           : undefined
       }
@@ -77,9 +79,9 @@ export function WorkCard({
           ? (e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                setExpanded(true);
+                setCardExpanded(title, true);
               }
-              if (e.key === "Escape") setExpanded(false);
+              if (e.key === "Escape") setCardExpanded(title, false);
             }
           : undefined
       }

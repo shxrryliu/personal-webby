@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect, ReactNode } from "react";
+import { ExpandedCardsProvider } from "./expanded-cards-context";
 
 const SCALE = 1.5;
 const LENS_SIZE = 150;
@@ -43,6 +44,7 @@ export function MagnifyPage({ children }: { children: ReactNode }) {
   const half = LENS_SIZE / 2;
 
   return (
+    <ExpandedCardsProvider>
     <div
       ref={containerRef}
       className="group/magnify relative"
@@ -81,5 +83,6 @@ export function MagnifyPage({ children }: { children: ReactNode }) {
         </div>
       )}
     </div>
+    </ExpandedCardsProvider>
   );
 }
