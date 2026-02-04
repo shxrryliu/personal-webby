@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { StaggerFadeIn, FadeInSection } from "./stagger-fade-in";
+import { WorkCard } from "./WorkCard";
 
 const workSections: {
   title: string;
@@ -9,32 +10,77 @@ const workSections: {
   aspect?: string;
   hasExternalLink?: boolean;
   url?: string;
+  details?: {
+    summary: string;
+    bulletsTitle?: string;
+    bullets?: string[];
+    paragraphs?: string[];
+    footer?: string;
+    footerUrl?: string;
+    mediaSrc?: string;
+    mediaAlt?: string;
+  };
 }[] = [
   {
     title: "Contracted PM/Designer for Sway",
     date: "Currently designing",
     image: "/images/sway.svg",
     aspect: "aspect-[3/1]",
+    details: {
+      summary:
+        "Sway is a civic tech platform that helps groups of voters coordinate their ballots to create real political leverage.",
+      bulletsTitle: "I’m working part-time to:",
+      bullets: [
+        "Redesign their core voter-facing experiences",
+        "Lead initiatives work across UX, product strategy, and product process",
+        "Translate messy civic workflows into clear, usable interfaces for real voting groups.",
+      ],
+      footer: "More to come!",
+    },
   },
   {
     title: '"Write your own" Quiz Question',
     date: "Released Aug 2025",
     image: "/images/quiz.svg",
     aspect: "aspect-[3/1]",
+    details: {
+      summary: "IXL's first user-authored content feature.",
+      paragraphs: [
+        "I drove product definition and UX while collaborating deeply with engineering to ship a flexible, scalable system. The feature unlocked regular assessment creation: teachers went from creating 0 assessments/week to ~2 assessments/week.",
+        "Used regularly across 200k+ classrooms in the United States.",
+      ],
+      mediaSrc: "/images/quizfigma.svg",
+      mediaAlt: "Quiz Question Figma board",
+    },
   },
   {
     title: "California Takeoff",
     date: "Released Mar 2025",
     image: "/images/california.svg",
     aspect: "aspect-[3/1]",
+    details: {
+      summary: "California Takeoff is the first digital core curriculum approved by the California Board of Education.",
+      paragraphs: [
+        "I led product and UX design within a highly regulated RFP process, translating policy and compliance requirements into usable, pedagogically sound learning experiences. Working closely with engineering and curriculum teams, I designed systems that meet state standards while enabling personalized instruction for every classroom.",
+      ],
+      footer: "Check it out",
+      footerUrl: "https://www.ixl.com/takeoffbyixl/california/curriculum",
+    },
   },
   {
     title: "Harvard Tech for Social Good",
     date: "Anywhere from 2021-2024",
     image: "/images/t4sg.svg",
     aspect: "aspect-[3/1]",
-    hasExternalLink: true,
-    url: "https://drive.google.com/drive/folders/1NQttAiSYES-7Qi1fE6_oK8PAjN9MAuG2?usp=drive_link",
+    details: {
+      summary: "Led product and design across multiple semesters for Harvard's student-run tech-for-good organization.",
+      paragraphs: [
+        "Directed cross-functional student teams building software for nonprofits. Coordinated 70+ user interviews. Pioneered end-to-end product design lifecycle: scoping projects with partner orgs, running design sprints, conducting design reviews for project teams.",
+        "Worked with partners including the ACLU, City of Boston, and local community organizations.",
+      ],
+      footer: "Read our design docs",
+      footerUrl: "https://drive.google.com/drive/folders/1NQttAiSYES-7Qi1fE6_oK8PAjN9MAuG2?usp=drive_link",
+    },
   },
 ];
 
@@ -100,69 +146,22 @@ export default function Home() {
         </FadeInSection>
 
         {/* Work Sections */}
-        {workSections.map((work, index) => {
-          const articleContent = (
-            <article className="group cursor-magnify px-[20px]">
-              {/* Title row */}
-              <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h2 className="text-sm font-bold md:text-base">
-                  {work.title}
-                </h2>
-                <span className="text-charcoal-light" aria-hidden="true">
-                  &#9734;
-                </span>
-                <span className="text-sm text-charcoal-light">{work.date}</span>
-              </div>
-
-              {/* Image area */}
-              {work.image && (
-                <div className={`relative ${work.aspect ?? "aspect-[3/1]"} overflow-hidden rounded-lg bg-cream-dark p-4 transition-shadow group-hover:shadow-md md:p-6`}>
-                  <Image
-                    src={work.image}
-                    alt={`${work.title} screenshot`}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              )}
-
-              {!work.image && (
-                <div className="relative flex aspect-[3/1] items-end justify-end rounded-lg bg-cream-dark p-4 transition-shadow group-hover:shadow-md md:p-6">
-                  {work.hasExternalLink && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-charcoal-light"
-                    >
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                      <polyline points="15 3 21 3 21 9" />
-                      <line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                  )}
-                </div>
-              )}
-            </article>
-          );
-
-          return (
-            <FadeInSection key={index} className={index < workSections.length - 1 ? "mb-16" : ""}>
-              {work.url ? (
-                <a href={work.url} target="_blank" rel="noopener noreferrer" className="block">
-                  {articleContent}
-                </a>
-              ) : (
-                articleContent
-              )}
-            </FadeInSection>
-          );
-        })}
+        {workSections.map((work, index) => (
+          <FadeInSection
+            key={index}
+            className={index < workSections.length - 1 ? "mb-16" : ""}
+          >
+            <WorkCard
+              title={work.title}
+              date={work.date}
+              image={work.image}
+              aspect={work.aspect}
+              hasExternalLink={work.hasExternalLink}
+              url={work.url}
+              details={work.details}
+            />
+          </FadeInSection>
+        ))}
 
         {/* Footer */}
         <FadeInSection>
