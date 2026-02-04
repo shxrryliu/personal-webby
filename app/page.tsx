@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { StaggerFadeIn, FadeInSection } from "./stagger-fade-in";
 import { WorkCard } from "./WorkCard";
+import { MagnifyHero } from "./magnify-hero";
 
 const workSections: {
   title: string;
@@ -90,6 +91,7 @@ export default function Home() {
       <StaggerFadeIn className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         {/* Hero Section */}
         <FadeInSection className="mb-20">
+          <MagnifyHero>
           <section>
             {/* Hero card with fibonacci spiral border */}
             <div className="relative rounded-lg bg-[url('/images/spiralbg.png')] bg-contain bg-no-repeat px-6 py-10 bg-[position:center_40px] md:bg-[position:center_-10px] md:px-10 md:py-10">
@@ -108,15 +110,21 @@ export default function Home() {
               {/* Intro with headshot */}
               <div className="flex flex-col items-start gap-6 md:flex-row md:gap-10">
                 {/* Headshot */}
-                <div className="mx-auto flex-shrink-0 md:mx-0 cursor-magnify">
-                  <Image
-                    src="/images/headshot.svg"
-                    alt="Sherry Liu"
-                    width={180}
-                    height={180}
-                    className="rounded-md"
-                    priority
-                  />
+                <div className="mx-auto flex-shrink-0 md:mx-0">
+                  <div className="cursor-magnify" data-magnify-trigger>
+                    <Image
+                      src="/images/headshot.svg"
+                      alt="Sherry Liu"
+                      width={180}
+                      height={180}
+                      className="rounded-md"
+                      priority
+                    />
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-charcoal-light">
+                    <span className="group-data-[magnify-active]/magnify:hidden">try my magnifying glass?</span>
+                    <span className="hidden group-data-[magnify-active]/magnify:inline">okay, you can give it back</span>
+                  </p>
                 </div>
 
                 {/* Intro text */}
@@ -138,6 +146,7 @@ export default function Home() {
               </div>
             </div>
           </section>
+          </MagnifyHero>
         </FadeInSection>
 
         {/* Work Sections */}
