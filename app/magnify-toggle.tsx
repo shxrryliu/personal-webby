@@ -44,8 +44,8 @@ export function MagnifyToggle({ targetId }: { targetId: string }) {
       });
     });
 
-    if (closestCard) {
-      setActiveColor(closestCard.gradientColor);
+    if (closestCard !== null) {
+      setActiveColor((closestCard as { title: string; gradientColor: string }).gradientColor);
     } else {
       setActiveColor(DEFAULT_COLOR);
     }

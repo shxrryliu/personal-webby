@@ -27,6 +27,7 @@ export function HeroImage({
       className={`${className} transition-opacity duration-700 ease-out ${
         isLoaded ? "opacity-100" : "opacity-0"
       }`}
+      style={{ width: width, height: "auto" }}
       priority
       onLoad={() => setIsLoaded(true)}
     />
