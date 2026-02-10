@@ -3,8 +3,8 @@
 import { useRef, useState, useCallback, useEffect, ReactNode } from "react";
 import { ExpandedCardsProvider } from "./expanded-cards-context";
 
-const SCALE = 1.5;
-const LENS_SIZE = 150;
+const SCALE = 1.75;
+const LENS_SIZE = 200;
 
 export function MagnifyPage({ children }: { children: ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);

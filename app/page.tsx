@@ -200,6 +200,12 @@ export default function Home() {
                   LinkedIn
                 </a>
               </p>
+              <p>
+                <a href="https://sherryliuser.substack.com/" target="_blank" rel="noopener noreferrer" 
+                className="underline hover:text-charcoal-light">
+                  Substack
+                </a>
+              </p>
             </div>
           </footer>
         </FadeInSection>
