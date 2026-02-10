@@ -4,6 +4,7 @@ import { MagnifyPage } from "./magnify-hero";
 import { StickyHeader } from "./sticky-header";
 import { MagnifyJar } from "./magnify-jar";
 import { HeroImage } from "./hero-image";
+import { TypingAnimation } from "./typing-animation";
 
 const workSections: {
   title: string;
@@ -138,7 +139,12 @@ export default function Home() {
                 {/* Intro text */}
                 <div className="space-y-4 text-sm leading-relaxed md:text-base">
                   <p>
-                    <strong>Welcome to my corner of the internet.</strong>
+                    <strong>
+                      <TypingAnimation
+                        prefix="Welcome to "
+                        text="my corner of the internet <3"
+                      />
+                    </strong>
                   </p>
                   <p>
                     <strong>Product manager/designer</strong> creating better [web]
