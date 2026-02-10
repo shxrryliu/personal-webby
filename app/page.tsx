@@ -113,7 +113,7 @@ export default function Home() {
                   v2026.0
                 </span>
               </h1>
-              <p className="mb-0 text-center ml-[100px] font-sans text-xs tracking-wide text-charcoal-light md:text-base">
+              <p className="mb-8 md:mb-0 text-center ml-[100px] font-sans text-xs tracking-wide text-charcoal-light md:text-base">
                 [sherry xinrui liu]
               </p>
 
