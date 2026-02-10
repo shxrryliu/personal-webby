@@ -1,9 +1,9 @@
-import Image from "next/image";
 import { StaggerFadeIn, FadeInSection } from "./stagger-fade-in";
 import { WorkCard } from "./WorkCard";
 import { MagnifyPage } from "./magnify-hero";
 import { StickyHeader } from "./sticky-header";
 import { MagnifyJar } from "./magnify-jar";
+import { HeroImage } from "./hero-image";
 
 const workSections: {
   title: string;
@@ -112,22 +112,21 @@ export default function Home() {
                   v2026.0
                 </span>
               </h1>
-              <p className="mb-10 text-center ml-[100px] font-sans text-xs tracking-wide text-charcoal-light md:text-base">
+              <p className="mb-0 text-center ml-[100px] font-sans text-xs tracking-wide text-charcoal-light md:text-base">
                 [sherry xinrui liu]
               </p>
 
               {/* Intro with headshot */}
-              <div className="flex flex-col items-start gap-6 md:flex-row md:gap-10">
+              <div className="flex flex-col items-center gap-6 md:flex-row md:gap-10">
                 {/* Headshot */}
                 <div className="mx-auto flex-shrink-0 md:mx-0">
                   <div className="cursor-magnify" data-magnify-trigger>
-                    <Image
+                    <HeroImage
                       src="/images/headshot.svg"
                       alt="Sherry Liu"
                       width={180}
                       height={180}
                       className="rounded-md"
-                      priority
                     />
                   </div>
                   <p className="mt-1 text-[11px] text-charcoal-light">
@@ -139,8 +138,7 @@ export default function Home() {
                 {/* Intro text */}
                 <div className="space-y-4 text-sm leading-relaxed md:text-base">
                   <p>
-                    <strong>Hi Gabe! It&apos;s Sherry.</strong> Threw this
-                    together last night. Enjoy. 🥳
+                    <strong>Welcome to my corner of the internet.</strong>
                   </p>
                   <p>
                     <strong>Product manager/designer</strong> creating better [web]
@@ -181,7 +179,7 @@ export default function Home() {
           <footer className="mt-20 flex flex-col gap-4 border-t border-warm-gray/50 pt-8 text-sm sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-1">
               <p>Thanks for checking this out</p>
-              <p>Me and Claude Code like &#9996;</p>
+              <p>Me and Claude Code like 🤞</p>
             </div>
             <div className="space-y-1 sm:text-right">
               <p>
@@ -194,8 +192,7 @@ export default function Home() {
                 <a href="https://www.linkedin.com/in/sherry-liu-0183a7167/" target="_blank" rel="noopener noreferrer" 
                 className="underline hover:text-charcoal-light">
                   LinkedIn
-                </a>{" "}
-                (which you already have)
+                </a>
               </p>
             </div>
           </footer>

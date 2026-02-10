@@ -1,8 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useId } from "react";
 import { useExpandedCards } from "./expanded-cards-context";
+
+// Generate a stable ID from title for accessibility attributes
+function slugify(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
 
 type WorkCardDetails = {
   summary: string;
@@ -42,7 +49,7 @@ export function WorkCard({
 }: WorkCardProps) {
   const { isExpanded, setExpanded: setCardExpanded } = useExpandedCards();
   const expanded = isExpanded(title);
-  const detailsId = useId();
+  const detailsId = `details-${slugify(title)}`;
 
   const isExpandable = Boolean(details);
   const isClickable = Boolean(url) || isExpandable;

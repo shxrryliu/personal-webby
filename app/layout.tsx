@@ -20,8 +20,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Sherry's portfolio",
-  description: "Product manager and designer creating better web UX for underserved communities.",
+  title: "sherry xinrui liu",
+  description: "product manager and designer creating better web UX for underserved communities.",
   icons: {
     icon: "/icon.svg",
   },
