@@ -21,9 +21,20 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "sherry xinrui liu",
-  description: "product manager and designer creating better web UX for underserved communities.",
+  description: "Product manager and designer creating better web UX for underserved communities. Currently improving education for 1 in 3 K-12 students in the United States.",
   icons: {
     icon: "/icon.svg",
+  },
+  openGraph: {
+    title: "sherry xinrui liu — portfolio v2026.0",
+    description: "Product manager and designer creating better web UX for underserved communities.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "sherry xinrui liu — portfolio v2026.0",
+    description: "Product manager and designer creating better web UX for underserved communities.",
   },
 };
 

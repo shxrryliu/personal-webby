@@ -2,7 +2,7 @@ import { StaggerFadeIn, FadeInSection } from "./stagger-fade-in";
 import { WorkCard } from "./WorkCard";
 import { MagnifyPage } from "./magnify-hero";
 import { StickyHeader } from "./sticky-header";
-import { MagnifyJar } from "./magnify-jar";
+import { MagnifyToggle } from "./magnify-toggle";
 import { HeroImage } from "./hero-image";
 import { TypingAnimation } from "./typing-animation";
 
@@ -98,7 +98,7 @@ export default function Home() {
     <MagnifyPage>
     <main className="min-h-screen bg-cream">
       <StickyHeader targetId="hero" />
-      <MagnifyJar targetId="hero" />
+      <MagnifyToggle targetId="hero" />
       <StaggerFadeIn className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         {/* Hero Section */}
         <FadeInSection className="mb-20">

@@ -58,7 +58,7 @@ export function TypingAnimation({
       {prefix}
       <span className="inline-block min-w-[1ch]">
         {displayedText}
-        <span className="animate-blink text-xl text-blue-800">|</span>
+        <span className="animate-blink text-xl text-blue-400">|</span>
       </span>
     </span>
   );

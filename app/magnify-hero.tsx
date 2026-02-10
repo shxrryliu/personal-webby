@@ -12,6 +12,7 @@ export function MagnifyPage({ children }: { children: ReactNode }) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [containerPos, setContainerPos] = useState({ x: 0, y: 0 });
   const [prefersReduced, setPrefersReduced] = useState(false);
+  const [overToggle, setOverToggle] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -29,6 +30,11 @@ export function MagnifyPage({ children }: { children: ReactNode }) {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     });
+
+    // Check if hovering over the toggle (not the hero trigger)
+    const target = e.target as HTMLElement;
+    const isOverToggle = !!target.closest("[data-magnify-toggle]");
+    setOverToggle(isOverToggle);
   }, []);
 
   const handleClick = useCallback((e: React.MouseEvent) => {
@@ -38,7 +44,7 @@ export function MagnifyPage({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const lensEnabled = active && !prefersReduced;
+  const lensEnabled = active && !prefersReduced && !overToggle;
   const containerWidth = containerRef.current?.scrollWidth ?? 0;
   const containerHeight = containerRef.current?.scrollHeight ?? 0;
   const half = LENS_SIZE / 2;
@@ -51,7 +57,7 @@ export function MagnifyPage({ children }: { children: ReactNode }) {
       data-magnify-active={active || undefined}
       onMouseMove={handleMouseMove}
       onClick={handleClick}
-      style={{ cursor: lensEnabled ? "none" : undefined }}
+      style={{ cursor: active && !prefersReduced && !overToggle ? "none" : undefined }}
     >
       {children}
 
