@@ -4,6 +4,7 @@ import { MagnifyPage } from "./magnify-hero";
 import { StickyHeader } from "./sticky-header";
 import { MagnifyToggle } from "./magnify-toggle";
 import { HeroImage } from "./hero-image";
+import { headshotBlurDataURL } from "./headshot-blur";
 import { TypingAnimation } from "./typing-animation";
 
 const workSections: {
@@ -123,11 +124,12 @@ export default function Home() {
                 <div className="mx-auto flex-shrink-0 md:mx-0">
                   <div className="cursor-magnify" data-magnify-trigger>
                     <HeroImage
-                      src="/images/headshot.svg"
+                      src="/images/headshot.webp"
                       alt="Sherry Liu"
-                      width={180}
-                      height={180}
+                      width={175}
+                      height={246}
                       className="rounded-md"
+                      blurDataURL={headshotBlurDataURL}
                     />
                   </div>
                   <p className="mt-1 text-[11px] text-charcoal-light">
