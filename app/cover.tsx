@@ -244,7 +244,7 @@ export function Cover() {
               <CountUp to={100} suffix="+" delay={1.0} skip={reduced} />
             </div>
             <p className="text-[17px] leading-6">
-              formerly incarcerated people I personally coached into
+              justice-impacted students I personally coached into
               high-paying skilled-trades jobs at{" "}
               <Org href="https://www.emergecareer.com">Emerge Career</Org>
             </p>
