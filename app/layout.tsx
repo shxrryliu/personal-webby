@@ -41,9 +41,6 @@ const description =
 export const metadata: Metadata = {
   title: "sherry xinrui liu",
   description,
-  icons: {
-    icon: "/icon.svg",
-  },
   openGraph: {
     title: "sherry xinrui liu",
     description,
