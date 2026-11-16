@@ -1,31 +1,51 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-cream: #f0ebe4;
-  --color-cream-dark: #E4E2DA;
-  --color-warm-gray: #d6cfc6;
-  --color-charcoal: #2c2c2c;
-  --color-charcoal-light: #5a5a5a;
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-playfair);
+  --color-oxblood: #6E1F24;
+  --color-bone: #EDE6DA;
+  --color-mustard: #E8B04A;
+  --color-olive: #6B6A3A;
+  --color-espresso: #2A1E18;
+  --color-rule: #C9BEAE;
+  --font-display: var(--font-bodoni-moda);
+  --font-text: var(--font-libre-caslon);
+  --font-type: var(--font-courier-prime);
+  --font-hand: var(--font-caveat);
+  --color-ink: #2440A8;
 }
 
 body {
-  background: var(--color-cream);
-  color: #625F56;
-  font-family: var(--font-sans);
+  background: var(--color-bone);
+  color: var(--color-espresso);
+  font-family: var(--font-libre-caslon), Georgia, serif;
 }
 
-.cursor-magnify {
-  cursor: url("/cursor-magnify.svg") 12 12, zoom-in;
+/*
+ * Multi-line headlines. Bodoni's hairlines (and its hyphens) get too thin to
+ * read comfortably at these sizes, even at a sturdier optical size, so story
+ * headlines and pull quotes use Caslon. The masthead and big numbers keep Bodoni.
+ */
+.font-headline {
+  font-family: var(--font-libre-caslon), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
 }
 
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+/* The little sound wave on the cover: each bar breathes between its own height and a whisper. */
+@keyframes voice-bar {
+  0%, 100% { transform: scaleY(var(--bar)); }
+  25% { transform: scaleY(0.25); }
+  50% { transform: scaleY(calc(var(--bar) * 0.8)); }
+  75% { transform: scaleY(1); }
 }
 
-.animate-blink {
-  animation: blink 1s infinite;
+.voice-bar {
+  transform: scaleY(var(--bar));
+  animation: voice-bar 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-bar {
+    animation: none;
+  }
 }
