@@ -10,7 +10,7 @@ const stories: Story[] = [
     current: true,
     org: "Emerge Career",
     headline:
-      "100+ formerly incarcerated people personally coached into high-paying skilled-trades jobs",
+      "100+ formerly incarcerated people coached into high-paying skilled-trades jobs",
     paragraphs: [
       "Creator of Journey, our AI career coach, brought to life with voice AI.",
       "Also: 2 hiring partnerships in the trucking industry, 1 design system, etc.",
