@@ -2,83 +2,57 @@ import { ImageResponse } from "next/og";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-export const alt = "sherry xinrui liu — portfolio v2026.0";
+export const alt = "Sherry Liu: designer, engineer, writer";
 export const size = {
   width: 1200,
   height: 630,
 };
 export const contentType = "image/png";
 
+/** Link-preview card in the cover's colours: the SHERRY masthead on oxblood. */
 export default async function Image() {
-  const playfairItalic = readFileSync(
-    join(process.cwd(), "app/PlayfairDisplay-Italic.ttf")
-  );
+  // Bodoni Moda (display cut), SIL Open Font License.
+  const bodoni = readFileSync(join(process.cwd(), "app/BodoniModa-Display.ttf"));
 
   return new ImageResponse(
     (
       <div
         style={{
-          background: "#f0ebe4",
+          background: "#6E1F24",
+          color: "#EDE6DA",
           width: "100%",
           height: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          fontFamily: "Bodoni Moda",
         }}
       >
-        {/* Portfolio title */}
+        <div
+          style={{
+            fontSize: "300px",
+            lineHeight: 1,
+            letterSpacing: "-0.05em",
+          }}
+        >
+          SHERRY
+        </div>
         <div
           style={{
             display: "flex",
-            alignItems: "baseline",
-            gap: "12px",
-            marginBottom: "12px",
+            marginTop: "28px",
+            fontSize: "40px",
+            color: "#E8B04A",
           }}
         >
-          <span
-            style={{
-              fontSize: "80px",
-              fontFamily: "Playfair Display",
-              fontStyle: "italic",
-              color: "#2c2c2c",
-            }}
-          >
-            portfolio
-          </span>
-          <span
-            style={{
-              fontSize: "22px",
-              color: "#5a5a5a",
-              fontFamily: "sans-serif",
-            }}
-          >
-            v2026.0
-          </span>
+          Designer · Engineer · Writer
         </div>
-
-        {/* Name */}
-        <span
-          style={{
-            fontSize: "24px",
-            color: "#5a5a5a",
-            fontFamily: "sans-serif",
-            letterSpacing: "0.05em",
-          }}
-        >
-          [sherry xinrui liu]
-        </span>
       </div>
     ),
     {
       ...size,
-      fonts: [
-        {
-          name: "Playfair Display",
-          data: playfairItalic,
-          style: "italic",
-        },
-      ],
+      fonts: [{ name: "Bodoni Moda", data: bodoni, style: "normal" }],
     }
   );
 }
