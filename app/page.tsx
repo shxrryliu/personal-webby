@@ -10,7 +10,7 @@ const stories: Story[] = [
     current: true,
     org: "Emerge Career",
     headline:
-      "100+ formerly incarcerated people personally coached into high-paying skilled-trades jobs",
+      "100+ formerly incarcerated people coached into high-paying skilled-trades jobs",
     paragraphs: [
       "Creator of Journey, our AI career coach, brought to life with voice AI.",
       "Also: 2 hiring partnerships in the trucking industry, 1 design system, etc.",
@@ -35,7 +35,7 @@ const stories: Story[] = [
     headline:
       "The first digital core curriculum approved by the California Board of Education",
     paragraphs: [
-      "I led product and UX design for California Takeoff within a highly regulated RFP process, translating policy and compliance requirements into usable, pedagogically sound learning experiences. Working closely with engineering and curriculum teams, I designed systems that meet state standards while enabling personalized instruction for every classroom.",
+      "I led product and UX design for California Takeoff through a highly regulated RFP process, turning policy and compliance requirements into lessons that meet state standards and still personalize instruction.",
     ],
     link: {
       label: "Check it out",
@@ -49,8 +49,8 @@ const stories: Story[] = [
     org: "Harvard Tech for Social Good",
     headline: "8 design teams sourced and staffed for nonprofits",
     paragraphs: [
-      "I designed hands-on for 2 nonprofits, then sourced and staffed 8 project manager-led design teams. Coordinated 70+ user interviews. Pioneered the end-to-end product design lifecycle: scoping projects with partner orgs, running design sprints, conducting design reviews for project teams.",
-      "Worked with partners including the ACLU, City of Boston, and local community organizations.",
+      "I designed hands-on for 2 nonprofits, then sourced and staffed 8 project manager-led design teams and coordinated 70+ user interviews.",
+      "Partners included the ACLU and the City of Boston.",
     ],
     link: {
       label: "Read our design docs",
