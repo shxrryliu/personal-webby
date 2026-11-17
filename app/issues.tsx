@@ -145,11 +145,11 @@ function StorySpread({ story, onClose }: { story: Story; onClose: () => void }) 
     <Sheet
       id={story.slug}
       label={story.headline}
-      title={`${story.mast} · Issue ${story.page}`}
+      title={`${story.mast} · issue ${story.page}`}
       strip={story.cover}
       tilt={story.tilt}
       onClose={onClose}
-      next={{ href: issueHash(next.slug), label: `Next issue: ${next.mast}` }}
+      next={{ href: issueHash(next.slug), label: `next issue: ${next.mast}` }}
     >
       <div className="grid gap-x-16 gap-y-5 px-5 pb-6 pt-6 md:grid-cols-2 md:px-8 md:pt-8">
         <div>
@@ -218,8 +218,8 @@ const INSPIRATION: Inspiration[] = [
     width: 590,
     height: 791,
     tilt: -2,
-    title: "Conversation with Myself",
-    credit: "Tatyana Markovtsev",
+    title: "conversation with myself",
+    credit: "tatyana markovtsev",
   },
   {
     src: "/images/inspo-gitanes.webp",
@@ -227,8 +227,8 @@ const INSPIRATION: Inspiration[] = [
     width: 570,
     height: 806,
     tilt: 1.5,
-    title: "Gitanes",
-    credit: "Christina Gordon",
+    title: "gitanes",
+    credit: "christina gordon",
   },
   {
     src: "/images/inspo-room.webp",
@@ -236,7 +236,7 @@ const INSPIRATION: Inspiration[] = [
     width: 900,
     height: 1170,
     tilt: -1,
-    credit: "Interior styled by Bertie Coad",
+    credit: "interior styled by bertie coad",
   },
   {
     src: "/images/inspo-painting.webp",
@@ -244,8 +244,8 @@ const INSPIRATION: Inspiration[] = [
     width: 432,
     height: 574,
     tilt: 2,
-    title: "Girl with Blue",
-    credit: "Alexandros Spentzaris",
+    title: "girl with blue",
+    credit: "alexandros spentzaris",
     note: "this color",
   },
   {
@@ -254,7 +254,7 @@ const INSPIRATION: Inspiration[] = [
     width: 432,
     height: 424,
     tilt: -1.5,
-    credit: "Flowers by Api (아피), South Korea",
+    credit: "flowers by api (아피), south korea",
   },
 ];
 
@@ -266,15 +266,15 @@ function AboutSpread({ onClose }: { onClose: () => void }) {
     <Sheet
       id="about"
       label="About Sherry"
-      title="About"
+      title="about"
       strip="bg-oxblood text-bone"
       tilt={-1.5}
       onClose={onClose}
-      next={{ href: issueHash(stories[0].slug), label: `Read the issues: ${stories[0].mast}` }}
+      next={{ href: issueHash(stories[0].slug), label: `read the issues: ${stories[0].mast}` }}
     >
       <div className="grid gap-x-16 gap-y-5 px-5 pt-7 md:grid-cols-2 md:px-8 md:pt-10">
         <h2 className="font-headline text-[clamp(34px,4.2vw,56px)] leading-[1.02] tracking-[-0.02em]">
-          I design tech <span className="text-oxblood">for good.</span>
+          i design tech <span className="text-oxblood">for good.</span>
         </h2>
         <div className="space-y-4 text-[17px] leading-7 md:pt-2">
           <p>

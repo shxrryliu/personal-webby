@@ -172,9 +172,9 @@ function RoleToggle({
 }
 
 const ROLES: { id: Role; label: string }[] = [
-  { id: "designer", label: "Designer" },
-  { id: "engineer", label: "Engineer" },
-  { id: "writer", label: "Writer" },
+  { id: "designer", label: "designer" },
+  { id: "engineer", label: "engineer" },
+  { id: "writer", label: "writer" },
 ];
 
 const numberClass =
@@ -388,9 +388,9 @@ export function Cover() {
               <CountUp to={100} suffix="+" delay={1.0} skip={reduced} />
             </div>
             <p className="text-[17px] leading-6">
-              justice-impacted students I personally coached into
+              justice-impacted students i personally coached into
               high-paying skilled-trades jobs at{" "}
-              <Org>Emerge Career</Org>
+              <Org>emerge career</Org>
             </p>
           </Row>
           <Row index={1} roles={["designer", "engineer"]} story="emerge-career" className={`flex items-center gap-3.5 pt-3.5 ${rule}`}>
@@ -450,8 +450,8 @@ export function Cover() {
             className={`flex w-full flex-row-reverse items-center justify-end gap-3.5 pb-3.5 pt-3 md:flex-row ${rule}`}
           >
             <p className="text-[15px] leading-[21px]">
-              digital curriculum approved by California&rsquo;s Board of
-              Education
+              digital curriculum approved by california&rsquo;s board of
+              education
             </p>
             <div className={`${numberClass} shrink-0`}>
               1<span className="text-2xl italic">st</span>
@@ -463,7 +463,7 @@ export function Cover() {
           >
             <p className="text-[15px] leading-[21px]">
               design teams sourced and staffed at{" "}
-              <Org>Harvard T4SG</Org>
+              <Org>harvard T4SG</Org>
             </p>
             <div className={`${numberClass} w-[30px] shrink-0`}>8</div>
           </Row>
@@ -472,7 +472,7 @@ export function Cover() {
             className={`flex w-full flex-row-reverse items-center justify-end gap-3.5 pt-3 md:flex-row ${rule}`}
           >
             <p className="text-[15px] leading-[21px] md:w-[200px] md:shrink-0">
-              nonprofits I designed for hands-on, pro bono
+              nonprofits i designed for hands-on, pro bono
             </p>
             <div className={`${numberClass} w-[30px] shrink-0`}>2</div>
           </Row>

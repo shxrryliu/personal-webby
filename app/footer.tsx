@@ -31,7 +31,7 @@ const links: FooterLink[] = [
   //   loop: 0,
   // },
   {
-    label: "LinkedIn",
+    label: "linkedin",
     href: "https://www.linkedin.com/in/sherry-liu-0183a7167/",
     cursor: "say hi ↗",
     tilt: 1.5,
@@ -39,7 +39,7 @@ const links: FooterLink[] = [
     loop: 1,
   },
   {
-    label: "Substack",
+    label: "substack",
     role: "writer",
     href: "https://sherryliuser.substack.com/",
     cursor: "read ↗",
@@ -48,9 +48,9 @@ const links: FooterLink[] = [
     loop: 2,
   },
   {
-    label: "Goodreads",
+    label: "goodreads",
     href: "https://www.goodreads.com/user/show/50509124-sherry-liu",
-    cursor: "what I’m reading ↗",
+    cursor: "what i’m reading ↗",
     tilt: 2,
     icon: [
       "M10 5c-1.6-1.3-3.8-1.6-6.5-1v11c2.7-.6 4.9-.3 6.5 1 1.6-1.3 3.8-1.6 6.5-1V4c-2.7-.6-4.9-.3-6.5 1z",
@@ -59,9 +59,9 @@ const links: FooterLink[] = [
     loop: 0,
   },
   {
-    label: "Letterboxd",
+    label: "letterboxd",
     href: "https://letterboxd.com/sherryliuser/",
-    cursor: "what I’m watching ↗",
+    cursor: "what i’m watching ↗",
     tilt: -1.5,
     icon: [
       "M4.5 4h11a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 3 14.5v-9A1.5 1.5 0 0 1 4.5 4z",
@@ -135,8 +135,7 @@ export function Doodle({
     whileHover: "hover",
     whileTap: { scale: 0.96 },
     style: { rotate: tilt },
-    // buttons don't inherit the page's lowercase, so it is set here too
-    className: `group relative inline-flex cursor-pointer items-center lowercase gap-1.5 px-1 py-1.5 text-[12px] leading-5 sm:px-2.5 sm:text-[13px] transition-colors duration-300 hover:text-mustard ${
+    className: `group relative inline-flex cursor-pointer items-center gap-1.5 px-1 py-1.5 text-[12px] leading-5 sm:px-2.5 sm:text-[13px] transition-colors duration-300 hover:text-mustard ${
       circled ? "text-mustard" : "text-bone"
     }`,
   } as const;
