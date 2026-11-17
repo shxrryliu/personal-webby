@@ -37,7 +37,7 @@ const ANNOTATIONS = {
       "M314 206 C296 212 282 214 266 213 M266 213 l11 -8 M266 213 l12 6",
     ],
     notes: [
-      { text: "California said yes", x: 772, y: 2, rotate: -2 },
+      { text: "california said yes", x: 772, y: 2, rotate: -2 },
       { text: "standards, built in", x: 322, y: 186, rotate: -2 },
     ],
   },
@@ -49,7 +49,7 @@ const ANNOTATIONS = {
     ],
     notes: [
       { text: "app one: reports for a school district", x: 96, y: -58, rotate: -1 },
-      { text: "app two: waste pickups in Fiji", x: 748, y: -58, rotate: 1 },
+      { text: "app two: waste pickups in fiji", x: 748, y: -58, rotate: 1 },
     ],
   },
 } satisfies Record<string, { padTop: boolean; marks: string[]; notes: Note[] }>;
@@ -134,9 +134,9 @@ export function DatePill({
 }
 
 const JOURNEY_QUOTES = [
-  { text: "It gave me all the updates for my CDL. It was fast.", who: "Arthur R." },
-  { text: "I used the voice, Journey? It was cool! Really fast.", who: "George T." },
-  { text: "I just went through and completed it... it was quick.", who: "Joseph G." },
+  { text: "it gave me all the updates for my CDL. it was fast.", who: "arthur r." },
+  { text: "i used the voice, journey? it was cool! really fast.", who: "george t." },
+  { text: "i just went through and completed it... it was quick.", who: "joseph g." },
 ];
 
 /**
@@ -181,11 +181,11 @@ function JourneyPanel() {
             “
           </div>
           <blockquote className="font-headline mt-3 text-[clamp(24px,2.5vw,36px)] leading-[1.12] text-espresso">
-            The resume builder was fast! It was cool... it was like{" "}
+            the resume builder was fast! it was cool... it was like{" "}
             <span className="text-oxblood">the future.</span>
           </blockquote>
           <figcaption className="mt-3 text-sm leading-5 text-espresso">
-            Miguel C., after building a resume by voice
+            miguel c., after building a resume by voice
           </figcaption>
         </motion.figure>
 
