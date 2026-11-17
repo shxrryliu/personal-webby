@@ -312,7 +312,9 @@ export function Cover() {
       <motion.h1
         style={{ x: mastheadX }}
         aria-label="Sherry Xinrui Liu"
-        className="pointer-events-none -mt-[2.78vw] select-none uppercase whitespace-nowrap text-center font-display text-[27.78vw] leading-none tracking-[-0.05em] lg:absolute lg:inset-x-0 lg:top-0"
+        // Sized to sit inside the viewport with a small margin each side, and
+        // centred with flex so any overflow is shared instead of cutting the Y.
+        className="pointer-events-none -mt-[2.6vw] flex select-none justify-center uppercase whitespace-nowrap font-display text-[26.2vw] leading-none tracking-[-0.05em] lg:absolute lg:inset-x-0 lg:top-0"
       >
         {MASTHEAD.map((letter, i) => (
           <motion.span
