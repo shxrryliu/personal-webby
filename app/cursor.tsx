@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 
 /**
- * A mustard dot that trails the mouse. Over anything with a `data-cursor`
+ * A cobalt dot that trails the mouse. Over anything with a `data-cursor`
  * attribute it opens into a little label carrying that text, and it swells
  * over other links. The real cursor stays visible; this only follows it.
  * With reduced motion it never listens for the mouse, so it stays hidden.
@@ -47,6 +47,7 @@ export function CursorFollower() {
       sync(e.target instanceof Element ? e.target : null);
     };
     // Scrolling moves the page under a still pointer, so re-read what it is over.
+    // Captured, so scrolling inside an open spread counts too (scroll doesn't bubble).
     const onScroll = () => {
       if (shown) sync(document.elementFromPoint(x.get(), y.get()));
     };
@@ -55,11 +56,11 @@ export function CursorFollower() {
       setVisible(false);
     };
     window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
     document.documentElement.addEventListener("pointerleave", onLeave);
     return () => {
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScroll, { capture: true });
       document.documentElement.removeEventListener("pointerleave", onLeave);
     };
   }, [reduced, x, y, sx, sy]);
@@ -94,7 +95,7 @@ export function CursorFollower() {
               animate={{ opacity: 1, scale: overLink ? 1.8 : 1 }}
               exit={{ opacity: 0, scale: 0 }}
               transition={{ type: "spring", stiffness: 500, damping: 24 }}
-              className="block h-3 w-3 rounded-full bg-mustard shadow-[0_2px_6px_rgba(42,30,24,0.25)]"
+              className="block h-3 w-3 rounded-full border border-bone/70 bg-cobalt shadow-[0_2px_6px_rgba(42,30,24,0.25)]"
             />
           )}
         </AnimatePresence>
