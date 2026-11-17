@@ -11,11 +11,12 @@
   --font-text: var(--font-libre-caslon);
   --font-type: var(--font-courier-prime);
   --font-hand: var(--font-caveat);
-  --color-ink: #2440A8;
+  --color-cobalt: #1A2FD0;
 }
 
 body {
-  background: var(--color-bone);
+  /* the whole page is the oxblood cover now; this shows when the page overscrolls */
+  background: var(--color-oxblood);
   color: var(--color-espresso);
   font-family: var(--font-libre-caslon), Georgia, serif;
 }

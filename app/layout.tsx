@@ -3,8 +3,8 @@ import {
   Bodoni_Moda,
   Libre_Caslon_Text,
   Courier_Prime,
-  Caveat,
 } from "next/font/google";
+import localFont from "next/font/local";
 import { Agentation } from "agentation";
 import "./globals.css";
 
@@ -28,11 +28,14 @@ const courier = Courier_Prime({
   weight: ["400", "700"],
 });
 
-// Handwriting for the pen notes on screenshots. Caveat stays legible at small sizes.
-const hand = Caveat({
+// Handwriting for the pen notes on screenshots. Caveat stays legible at small
+// sizes. Self-hosted (SIL Open Font License): fetching it through
+// next/font/google failed in dev with "queries have exactly one entry".
+const hand = localFont({
+  src: "./fonts/Caveat-latin.woff2",
   variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: "400 700",
+  display: "swap",
 });
 
 const description =

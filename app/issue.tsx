@@ -3,23 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { EASE, useTiming } from "./motion";
-
-export type Story = {
-  /** Shown in the date pill, e.g. "Aug 2025". */
-  when: string;
-  /** Marks ongoing work: the pill fills in and gets a live dot. */
-  current?: boolean;
-  org: string;
-  /** Outcome-led headline. */
-  headline: string;
-  paragraphs: string[];
-  link?: { label: string; href: string };
-  /** One wide screenshot, or the Journey panel. */
-  image?: string;
-  visual?: "journey";
-  /** Pen notes drawn over the screenshot. */
-  annotate?: keyof typeof ANNOTATIONS;
-};
+import type { Story } from "./stories";
 
 type Note = { text: string; x: number; y: number; rotate: number };
 
@@ -74,7 +58,6 @@ const ANNOTATIONS = {
 function Annotations({ set }: { set: keyof typeof ANNOTATIONS }) {
   const { timing } = useTiming();
   const { marks, notes } = ANNOTATIONS[set];
-  const view = { once: true, margin: "-18% 0px" } as const;
 
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden sm:block">
@@ -82,7 +65,7 @@ function Annotations({ set }: { set: keyof typeof ANNOTATIONS }) {
         viewBox="0 0 1200 480"
         className="absolute inset-0 h-full w-full overflow-visible"
         fill="none"
-        stroke="#2440A8"
+        stroke="#1A2FD0"
         strokeWidth="3.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -92,8 +75,7 @@ function Annotations({ set }: { set: keyof typeof ANNOTATIONS }) {
             key={d}
             d={d}
             initial={{ pathLength: 0, opacity: 0 }}
-            whileInView={{ pathLength: 1, opacity: 1 }}
-            viewport={view}
+            animate={{ pathLength: 1, opacity: 1 }}
             transition={timing({
               duration: 0.7,
               delay: 0.7 + i * 0.35,
@@ -105,7 +87,7 @@ function Annotations({ set }: { set: keyof typeof ANNOTATIONS }) {
       {notes.map((note, i) => (
         <motion.span
           key={note.text}
-          className="absolute whitespace-nowrap font-hand font-semibold leading-none text-ink"
+          className="absolute whitespace-nowrap font-hand font-semibold leading-none text-cobalt"
           style={{
             // scales with the screenshot's width
             fontSize: "max(15px, 2.7cqw)",
@@ -114,8 +96,7 @@ function Annotations({ set }: { set: keyof typeof ANNOTATIONS }) {
             rotate: note.rotate,
           }}
           initial={{ opacity: 0, y: 6 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={view}
+          animate={{ opacity: 1, y: 0 }}
           transition={timing({ duration: 0.5, delay: 0.9 + i * 0.35 })}
         >
           {note.text}
@@ -166,15 +147,13 @@ const JOURNEY_QUOTES = [
 function JourneyPanel() {
   const { timing } = useTiming();
   const enter = (delay: number) => timing({ duration: 0.8, delay, ease: EASE });
-  const view = { once: true, margin: "-12% 0px" } as const;
 
   return (
     <div className="flex flex-col gap-8 bg-[#F7F3EC] p-7 shadow-[0_18px_40px_rgba(42,30,24,0.12)] sm:flex-row sm:items-center md:gap-10 md:p-10">
       <motion.div
         className="mx-auto w-[58%] max-w-[230px] shrink-0 sm:mx-0 sm:w-[32%]"
         initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={view}
+        animate={{ opacity: 1, y: 0 }}
         transition={enter(0.1)}
       >
         <Image
@@ -183,15 +162,16 @@ function JourneyPanel() {
           width={780}
           height={1434}
           sizes="(min-width: 640px) 230px, 58vw"
-          className="block h-auto w-full"
+          // spreads mount on demand, so load their pictures straight away
+                  loading="eager"
+                  className="block h-auto w-full"
         />
       </motion.div>
 
       <div className="min-w-0 flex-1">
         <motion.figure
           initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={view}
+          animate={{ opacity: 1, y: 0 }}
           transition={enter(0.2)}
         >
           <div
@@ -213,8 +193,7 @@ function JourneyPanel() {
           <motion.div
             className="shrink-0 xl:w-[38%]"
             initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={view}
+            animate={{ opacity: 1, y: 0 }}
             transition={enter(0.35)}
           >
             <p className="font-display text-[clamp(48px,5vw,72px)] leading-[0.9] tracking-[-0.04em] text-oxblood">
@@ -231,8 +210,7 @@ function JourneyPanel() {
                 key={quote.who}
                 className="text-[13px] leading-[18px] text-espresso"
                 initial={{ opacity: 0, x: 12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={view}
+                animate={{ opacity: 1, x: 0 }}
                 transition={enter(0.45 + i * 0.12)}
               >
                 “{quote.text}”{" "}
@@ -246,89 +224,41 @@ function JourneyPanel() {
   );
 }
 
-function StoryRow({ story, index }: { story: Story; index: number }) {
-  const { reduced, timing } = useTiming();
-  const tilt = index % 2 === 0 ? -1.5 : 1.5;
+/** A story's picture: the annotated screenshot or the Journey panel. Animates in as soon as it mounts. */
+export function StoryVisual({ story }: { story: Story }) {
+  const { timing } = useTiming();
 
   return (
-    <article className="grid gap-x-16 gap-y-8 border-t border-espresso py-12 first:border-t-0 lg:grid-cols-12 lg:py-16"
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={timing({ duration: 0.7, delay: 0.15, ease: EASE })}
     >
-      <motion.div
-        className="lg:col-span-5"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-12% 0px" }}
-        transition={timing({ duration: 0.8, ease: EASE })}
-      >
-        <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[15px] leading-6 text-oxblood">
-          <DatePill current={story.current}>{story.when}</DatePill>
-          {story.org}
-        </p>
-        <h2 className="font-headline mt-4 text-[clamp(28px,3vw,42px)] leading-[1.14]">
-          {story.headline}
-        </h2>
-        <div className="mt-6 max-w-[34rem] space-y-4 text-[17px] leading-7">
-          {story.paragraphs.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
-        </div>
-        {story.link && (
-          <a
-            href={story.link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="open ↗"
-            className="mt-6 inline-block text-[17px] text-oxblood underline decoration-1 underline-offset-4 transition-colors hover:text-espresso"
-          >
-            {story.link.label} →
-          </a>
-        )}
-      </motion.div>
-
-      <motion.div
-        className="lg:col-span-7"
-        initial={{ opacity: 0, y: 40, rotate: tilt * 2 }}
-        whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-        whileHover={reduced ? undefined : { rotate: tilt, scale: 1.015 }}
-        viewport={{ once: true, margin: "-12% 0px" }}
-        transition={timing({ duration: 0.9, ease: EASE })}
-      >
-        {story.image ? (
-          <div
-            className={`bg-[#F7F3EC] p-3 shadow-[0_18px_40px_rgba(42,30,24,0.12)] md:p-5 ${
-              story.annotate && ANNOTATIONS[story.annotate].padTop
-                ? "sm:pt-[9%] md:pt-[9%]"
-                : ""
-            }`}
-          >
-            <div className="relative [container-type:inline-size]">
-              <Image
-                src={story.image}
-                alt={`${story.headline}: screenshots`}
-                width={1200}
-                height={480}
-                sizes="(min-width: 1024px) 58vw, 100vw"
-                className="block h-auto w-full"
-              />
-              {story.annotate && (
-                <Annotations set={story.annotate} />
-              )}
-            </div>
+      {story.image ? (
+        <div
+          className={`bg-[#F7F3EC] p-3 shadow-[0_18px_40px_rgba(42,30,24,0.12)] md:p-5 ${
+            story.annotate && ANNOTATIONS[story.annotate].padTop
+              ? "sm:pt-[9%] md:pt-[9%]"
+              : ""
+          }`}
+        >
+          <div className="relative [container-type:inline-size]">
+            <Image
+              src={story.image}
+              alt={`${story.headline}: screenshots`}
+              width={1200}
+              height={480}
+              sizes="(min-width: 1024px) 960px, 100vw"
+              // spreads mount on demand, so load their pictures straight away
+                  loading="eager"
+                  className="block h-auto w-full"
+            />
+            {story.annotate && <Annotations set={story.annotate} />}
           </div>
-        ) : story.visual === "journey" ? (
-          <JourneyPanel />
-        ) : null}
-      </motion.div>
-    </article>
-  );
-}
-
-export function Issue({ stories }: { stories: Story[] }) {
-  return (
-    <section className="px-6 pb-8 pt-4 md:px-14 md:pt-8">
-      {stories.map((story, i) => (
-        <StoryRow key={story.headline} story={story} index={i} />
-      ))}
-    </section>
+        </div>
+      ) : story.visual === "journey" ? (
+        <JourneyPanel />
+      ) : null}
+    </motion.div>
   );
 }

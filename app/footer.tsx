@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState, type ReactNode } from "react";
+import type { Role } from "./cover";
 import { useTiming } from "./motion";
 
 type FooterLink = {
@@ -14,6 +16,8 @@ type FooterLink = {
   icon: string[];
   /** Which hand-drawn loop circles the link on hover. */
   loop: number;
+  /** The hat this link belongs to, if any (see the roles in cover.tsx). */
+  role?: Role;
 };
 
 const links: FooterLink[] = [
@@ -35,7 +39,8 @@ const links: FooterLink[] = [
     loop: 1,
   },
   {
-    label: "Writing",
+    label: "Substack",
+    role: "writer",
     href: "https://sherryliuser.substack.com/",
     cursor: "read ↗",
     tilt: -1,
@@ -79,32 +84,68 @@ const LOOPS = [
 ];
 
 /**
- * A footer link in the same thin pen line as the screenshot notes: its icon is
- * drawn in when the footer scrolls into view, and on hover a loop is scribbled
- * around it while the icon wiggles.
+ * One item in the strip under the cover, in the same thin pen line as the
+ * screenshot notes: a line-drawn icon, a word and a wavy underline, sitting at
+ * a slight tilt. The icon is drawn in on load; on hover a loop is scribbled
+ * around the item while the icon wiggles. `circled` keeps the loop on.
+ *
+ * Renders a link when given `href`, otherwise a checkbox-style button, so the
+ * hats on the left and the links on the right are the same object.
  */
-function DoodleLink({ link, index }: { link: FooterLink; index: number }) {
+export function Doodle({
+  label,
+  icon,
+  tilt,
+  loop,
+  index,
+  cursor,
+  href,
+  onClick,
+  circled = false,
+  children,
+}: {
+  label: string;
+  /** Pen strokes in a 20 x 20 box. */
+  icon: string[];
+  tilt: number;
+  loop: number;
+  index: number;
+  cursor: string;
+  href?: string;
+  onClick?: () => void;
+  circled?: boolean;
+  /** Extra strokes drawn inside the icon, e.g. a tick. */
+  children?: ReactNode;
+}) {
   const { reduced, timing } = useTiming();
   const draw = (duration: number, delay = 0) =>
     timing({ duration, delay, ease: "easeInOut" });
+  // The staggered delay is only for the first draw-in on load; afterwards the
+  // underline should come straight back when a hover or a tick ends.
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setSettled(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
-  return (
-    <motion.a
-      href={link.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-cursor={link.cursor}
-      initial="hidden"
-      whileInView="rest"
-      whileHover="hover"
-      whileTap={{ scale: 0.96 }}
-      viewport={{ once: true }}
-      style={{ rotate: link.tilt }}
-      className="group relative inline-flex items-center gap-2 px-4 py-2.5 text-[19px] leading-6 text-bone transition-colors duration-300 hover:text-mustard"
-    >
+  const shared = {
+    "data-cursor": cursor,
+    initial: "hidden",
+    animate: circled ? "hover" : "rest",
+    whileHover: "hover",
+    whileTap: { scale: 0.96 },
+    style: { rotate: tilt },
+    // buttons don't inherit the page's lowercase, so it is set here too
+    className: `group relative inline-flex cursor-pointer items-center lowercase gap-1.5 px-1 py-1.5 text-[12px] leading-5 sm:px-2.5 sm:text-[13px] transition-colors duration-300 hover:text-mustard ${
+      circled ? "text-mustard" : "text-bone"
+    }`,
+  } as const;
+
+  const inner = (
+    <>
       <motion.svg
-        width="20"
-        height="20"
+        width="14"
+        height="14"
         viewBox="0 0 20 20"
         aria-hidden="true"
         fill="none"
@@ -112,13 +153,14 @@ function DoodleLink({ link, index }: { link: FooterLink; index: number }) {
         strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        className="overflow-visible"
         variants={{
           hover: reduced
             ? {}
             : { rotate: [0, -12, 9, 0], transition: { duration: 0.5 } },
         }}
       >
-        {link.icon.map((d, i) => (
+        {icon.map((d, i) => (
           <motion.path
             key={d}
             d={d}
@@ -133,8 +175,9 @@ function DoodleLink({ link, index }: { link: FooterLink; index: number }) {
             }}
           />
         ))}
+        {children}
       </motion.svg>
-      {link.label}
+      {label}
       <svg
         aria-hidden="true"
         viewBox="0 0 100 40"
@@ -150,19 +193,19 @@ function DoodleLink({ link, index }: { link: FooterLink; index: number }) {
           d="M30 37 q5 -3 10 0 t10 0 t10 0 t10 0 t10 0 t10 0"
           vectorEffect="non-scaling-stroke"
           stroke="#EDE6DA"
-          strokeOpacity="0.55"
+          strokeOpacity="0.6"
           variants={{
             hidden: { pathLength: 0, opacity: 0 },
             rest: {
               pathLength: 1,
               opacity: 1,
-              transition: draw(0.5, 0.4 + index * 0.12),
+              transition: draw(settled ? 0.3 : 0.5, settled ? 0 : 0.4 + index * 0.12),
             },
             hover: { pathLength: 1, opacity: 0, transition: draw(0.2) },
           }}
         />
         <motion.path
-          d={LOOPS[link.loop]}
+          d={LOOPS[loop]}
           vectorEffect="non-scaling-stroke"
           variants={{
             hidden: { pathLength: 0, opacity: 0 },
@@ -171,23 +214,58 @@ function DoodleLink({ link, index }: { link: FooterLink; index: number }) {
           }}
         />
       </svg>
+    </>
+  );
+
+  return href ? (
+    <motion.a href={href} target="_blank" rel="noopener noreferrer" {...shared}>
+      {inner}
     </motion.a>
+  ) : (
+    <motion.button
+      type="button"
+      role="checkbox"
+      aria-checked={circled}
+      onClick={onClick}
+      {...shared}
+    >
+      {inner}
+    </motion.button>
   );
 }
 
-export function Footer() {
+/**
+ * Where else to find me: the links at the right of the strip under the cover.
+ * When a hat is picked, links that don't belong to it dim.
+ */
+export function Universe({
+  role,
+  startIndex,
+}: {
+  role: Role | null;
+  /** How many items are drawn in before these, so the stagger carries on. */
+  startIndex: number;
+}) {
   return (
-    <footer className="flex flex-col gap-4 bg-oxblood px-6 py-9 text-bone md:px-14 xl:flex-row xl:items-center xl:justify-between">
-      <p className="shrink-0 font-display text-[26px] leading-none tracking-[-0.02em] xl:whitespace-nowrap">
-        The extended Sherry Liu internet universe
-      </p>
-      <ul className="-mx-4 flex flex-wrap gap-x-1 gap-y-1 xl:mx-0 xl:justify-end">
-        {links.map((link, i) => (
-          <li key={link.label}>
-            <DoodleLink link={link} index={i} />
-          </li>
-        ))}
-      </ul>
-    </footer>
+    <ul className="-mx-1 flex justify-between sm:-mx-2.5 sm:justify-start">
+      {links.map((link, i) => (
+        <li
+          key={link.label}
+          className={`transition-opacity duration-300 ${
+            role && link.role !== role ? "opacity-30" : ""
+          }`}
+        >
+          <Doodle
+            label={link.label}
+            icon={link.icon}
+            tilt={link.tilt}
+            loop={link.loop}
+            index={i + startIndex}
+            cursor={link.cursor}
+            href={link.href}
+          />
+        </li>
+      ))}
+    </ul>
   );
 }
