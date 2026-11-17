@@ -19,6 +19,7 @@ import {
 import { Doodle, Universe } from "./footer";
 import { EASE, useTiming } from "./motion";
 import { ABOUT_HASH, issueHash } from "./stories";
+import type { LatestPost } from "./substack";
 
 const MASTHEAD = "SHERRY".split("");
 
@@ -80,12 +81,14 @@ function Row({
   index,
   story,
   roles = [],
+  fadeOnly = false,
   className = "",
   children,
 }: {
   index: number;
   story?: string;
   roles?: Role[];
+  fadeOnly?: boolean;
   className?: string;
   children: ReactNode;
 }) {
@@ -94,7 +97,7 @@ function Row({
   const dim = role !== null && !roles.includes(role);
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: fadeOnly ? 0 : 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={timing({ duration: 0.7, delay: 0.95 + index * 0.09, ease: EASE })}
       data-dim={dim}
@@ -193,6 +196,18 @@ function Desk({
 }) {
   const { reduced, timing } = useTiming();
   const delay = 1.7 + index * 0.12;
+  const [arrivalWave, setArrivalWave] = useState(false);
+  useEffect(() => {
+    if (!filled || reduced) return;
+    // Say hello once the yellow student has appeared, then lower the arm.
+    const start = setTimeout(() => setArrivalWave(true), 2750);
+    const finish = setTimeout(() => setArrivalWave(false), 4050);
+    return () => {
+      clearTimeout(start);
+      clearTimeout(finish);
+    };
+  }, [filled, reduced]);
+  const wave = waving || arrivalWave;
   return (
     <motion.svg
       width="34"
@@ -217,7 +232,7 @@ function Desk({
           animate={{ opacity: 1 }}
           transition={timing({ duration: 0.5, delay: 2.25 })}
         >
-          {/* an arm that goes up and waves while the cursor is on the desks */}
+          {/* Wave on arrival, and again while the cursor is on the desks. */}
           <motion.path
             d="M57 44 L70 16"
             stroke="#E8B04A"
@@ -226,12 +241,12 @@ function Desk({
             style={{ transformBox: "view-box", transformOrigin: "57px 44px" }}
             initial={false}
             animate={
-              waving
+              wave
                 ? { opacity: 1, rotate: reduced ? 0 : [70, -6, 16, -6, 16, 0] }
                 : { opacity: 0, rotate: 70 }
             }
             transition={
-              waving
+              wave
                 ? timing({ duration: 1.1, ease: "easeInOut", opacity: { duration: 0.1 } })
                 : timing({ duration: 0.25 })
             }
@@ -270,7 +285,7 @@ function VoiceWave() {
   );
 }
 
-export function Cover() {
+export function Cover({ latestPost }: { latestPost: LatestPost | null }) {
   const [role, setRole] = useState<Role | null>(null);
   const [waving, setWaving] = useState(false);
   const { reduced, timing } = useTiming();
@@ -405,10 +420,29 @@ export function Cover() {
               hiring partnerships in the trucking industry
             </p>
           </Row>
-          <Row index={3} roles={["designer", "engineer"]} story="emerge-career" className={`flex items-center gap-3.5 pt-3.5 ${rule}`}>
-            <div className={`${numberClass} w-11 shrink-0`}>1</div>
-            <p className="text-base leading-[22px]">design system</p>
-          </Row>
+          {latestPost && (
+            <Row index={9} roles={["writer"]} fadeOnly className="mt-10 max-w-[320px]">
+              <a
+                href={latestPost.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="read the latest ↗"
+                className="group/clipping block bg-bone px-4 py-3 text-espresso focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-mustard"
+              >
+                <span className="block text-[18px] leading-[1.3]">
+                  {latestPost.title.toLowerCase()}
+                </span>
+                <span className="mt-2.5 flex items-center justify-between gap-3 font-type text-[11px] text-espresso/70">
+                  <time dateTime={latestPost.published}>
+                    {new Date(latestPost.published).toLocaleDateString("en-US", {
+                      month: "short", day: "numeric", year: "numeric", timeZone: "UTC",
+                    }).toLowerCase()}
+                  </time>
+                  <span className="font-type text-[11px] text-cobalt group-hover/clipping:underline">from diet coke club ↗</span>
+                </span>
+              </a>
+            </Row>
+          )}
         </div>
 
         <div className="flex flex-col gap-3.5 md:items-end md:text-right lg:absolute lg:right-14 lg:top-[calc(25.8vw+52px)] lg:z-20 lg:w-[clamp(236px,20.8vw,300px)]">
