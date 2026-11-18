@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
 import type { Role } from "./cover";
 import { useTiming } from "./motion";
+import { READING_HASH, WATCHING_HASH } from "./personal-links";
 
 type FooterLink = {
   label: string;
@@ -48,9 +49,9 @@ const links: FooterLink[] = [
     loop: 2,
   },
   {
-    label: "goodreads",
-    href: "https://www.goodreads.com/user/show/50509124-sherry-liu",
-    cursor: "what i’m reading ↗",
+    label: "bookshelf",
+    href: READING_HASH,
+    cursor: "what i’m reading →",
     tilt: 2,
     icon: [
       "M10 5c-1.6-1.3-3.8-1.6-6.5-1v11c2.7-.6 4.9-.3 6.5 1 1.6-1.3 3.8-1.6 6.5-1V4c-2.7-.6-4.9-.3-6.5 1z",
@@ -59,9 +60,9 @@ const links: FooterLink[] = [
     loop: 0,
   },
   {
-    label: "letterboxd",
-    href: "https://letterboxd.com/sherryliuser/",
-    cursor: "what i’m watching ↗",
+    label: "film roll",
+    href: WATCHING_HASH,
+    cursor: "what i’m watching →",
     tilt: -1.5,
     icon: [
       "M4.5 4h11a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 3 14.5v-9A1.5 1.5 0 0 1 4.5 4z",
@@ -217,7 +218,7 @@ export function Doodle({
   );
 
   return href ? (
-    <motion.a href={href} target="_blank" rel="noopener noreferrer" {...shared}>
+    <motion.a href={href} target={href.startsWith("#") ? undefined : "_blank"} rel={href.startsWith("#") ? undefined : "noopener noreferrer"} {...shared}>
       {inner}
     </motion.a>
   ) : (

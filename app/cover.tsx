@@ -19,7 +19,8 @@ import {
 import { Doodle, Universe } from "./footer";
 import { EASE, useTiming } from "./motion";
 import { ABOUT_HASH, issueHash } from "./stories";
-import type { LatestPost } from "./substack";
+import type { SubstackPost } from "./substack";
+import { SubstackHighlight } from "./substack-highlight";
 
 const MASTHEAD = "SHERRY".split("");
 
@@ -29,36 +30,43 @@ function CountUp({
   suffix = "",
   delay,
   skip,
+  className = "tabular-nums",
 }: {
   to: number;
   suffix?: string;
   delay: number;
   skip: boolean;
+  className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const final = to.toLocaleString("en-US") + suffix;
+  const final = to.toLocaleString("en-US");
 
   useEffect(() => {
     const el = ref.current;
     if (skip || !el) return;
-    el.textContent = "0" + suffix;
+    el.textContent = "0";
     const controls = animate(0, to, {
       duration: 1.5,
       delay,
       ease: EASE,
       onUpdate: (v) => {
-        el.textContent = Math.round(v).toLocaleString("en-US") + suffix;
+        el.textContent = Math.round(v).toLocaleString("en-US");
       },
     });
     return () => {
       controls.stop();
       el.textContent = final;
     };
-  }, [skip, to, suffix, delay, final]);
+  }, [skip, to, delay, final]);
 
   return (
-    <span ref={ref} className="tabular-nums">
-      {final}
+    <span className={className}>
+      <span ref={ref}>{final}</span>
+      {suffix && (
+        <span className="ml-[0.025em]" style={{ WebkitTextStroke: "0.6px currentColor" }}>
+          {suffix}
+        </span>
+      )}
     </span>
   );
 }
@@ -285,7 +293,7 @@ function VoiceWave() {
   );
 }
 
-export function Cover({ latestPost }: { latestPost: LatestPost | null }) {
+export function Cover({ posts }: { posts: SubstackPost[] }) {
   const [role, setRole] = useState<Role | null>(null);
   const [waving, setWaving] = useState(false);
   const { reduced, timing } = useTiming();
@@ -400,7 +408,7 @@ export function Cover({ latestPost }: { latestPost: LatestPost | null }) {
         <div className="flex flex-col gap-3.5 lg:absolute lg:left-14 lg:top-[calc(25.8vw+52px)] lg:z-20 lg:w-[clamp(236px,25.8vw,372px)]">
           <Row index={0} story="emerge-career" className="flex flex-col gap-0.5">
             <div className="font-display text-[104px] leading-[92px] tracking-[-0.04em] transition-colors duration-300 group-hover:text-mustard">
-              <CountUp to={100} suffix="+" delay={1.0} skip={reduced} />
+              <CountUp to={100} suffix="+" delay={1.0} skip={reduced} className="proportional-nums" />
             </div>
             <p className="text-[17px] leading-6">
               justice-impacted students i personally coached into
@@ -420,27 +428,9 @@ export function Cover({ latestPost }: { latestPost: LatestPost | null }) {
               hiring partnerships in the trucking industry
             </p>
           </Row>
-          {latestPost && (
+          {posts.length > 0 && (
             <Row index={9} roles={["writer"]} fadeOnly className="mt-10 max-w-[320px]">
-              <a
-                href={latestPost.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="read the latest ↗"
-                className="group/clipping block bg-bone px-4 py-3 text-espresso focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-mustard"
-              >
-                <span className="block text-[18px] leading-[1.3]">
-                  {latestPost.title.toLowerCase()}
-                </span>
-                <span className="mt-2.5 flex items-center justify-between gap-3 font-type text-[11px] text-espresso/70">
-                  <time dateTime={latestPost.published}>
-                    {new Date(latestPost.published).toLocaleDateString("en-US", {
-                      month: "short", day: "numeric", year: "numeric", timeZone: "UTC",
-                    }).toLowerCase()}
-                  </time>
-                  <span className="font-type text-[11px] text-cobalt group-hover/clipping:underline">from diet coke club ↗</span>
-                </span>
-              </a>
+              <SubstackHighlight posts={posts} />
             </Row>
           )}
         </div>
@@ -448,7 +438,7 @@ export function Cover({ latestPost }: { latestPost: LatestPost | null }) {
         <div className="flex flex-col gap-3.5 md:items-end md:text-right lg:absolute lg:right-14 lg:top-[calc(25.8vw+52px)] lg:z-20 lg:w-[clamp(236px,20.8vw,300px)]">
           <Row index={4} roles={["designer"]} story="write-your-own" className="flex flex-col gap-0.5 md:items-end">
             <div className="font-display text-[44px] leading-[44px] tracking-[-0.03em] transition-colors duration-300 group-hover:text-mustard">
-              <CountUp to={200000} delay={1.25} skip={reduced} />
+              <CountUp to={200000} suffix="+" delay={1.25} skip={reduced} />
             </div>
             <p className="text-[15px] leading-[21px]">
               classrooms created custom content on{" "}

@@ -31,7 +31,7 @@ export const stories: Story[] = [
   {
     slug: "emerge-career",
     mast: "emerge",
-    cover: "bg-olive text-bone",
+    cover: "bg-espresso text-bone",
     tilt: -2,
     page: "01",
     when: "currently",
@@ -56,7 +56,7 @@ export const stories: Story[] = [
     org: "IXL learning",
     orgUrl: "https://www.ixl.com",
     headline:
-      "200,000 classrooms created custom content that became district-wide common assessments",
+      "200,000+ classrooms created custom content that became district-wide common assessments",
     body: [
       "i drove product definition and UX for “write your own,” IXL’s first user-authored content feature. teachers went from creating 0 assessments a week to about 2.",
       "also: lockdown browser, RFP integrations, classroom collaboration tools, etc.",

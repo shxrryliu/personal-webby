@@ -45,8 +45,123 @@ body {
   animation: voice-bar 1.4s ease-in-out infinite;
 }
 
+/* A small dog-ear: the clipped corner exposes the backdrop, while the
+ * triangle above the crease shows the warm underside of the paper. */
+.paper-footer {
+  --fold: 22px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--fold)), calc(100% - var(--fold)) 100%, 0 100%);
+  transition: --fold 220ms ease;
+}
+
+@property --fold {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 22px;
+}
+
+.paper-footer:has(a:hover),
+.paper-footer:has(a:focus-visible) {
+  --fold: 34px;
+}
+
+.paper-footer[data-turning="true"] {
+  --fold: 44px;
+}
+
+.paper-fold {
+  width: var(--fold);
+  height: var(--fold);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  background: linear-gradient(135deg, #F7F3EC 8%, #D6C9B6 80%, #B9A98F);
+  filter: drop-shadow(-1px -1px 1px rgb(42 30 24 / 18%));
+}
+
+@property --essay-left {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 8px;
+}
+
+@property --essay-right {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 8px;
+}
+
+.essay-card {
+  --essay-left: 8px;
+  --essay-right: 8px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--essay-right)), calc(100% - var(--essay-right)) 100%, var(--essay-left) 100%, 0 calc(100% - var(--essay-left)));
+  transition: --essay-left 220ms ease, --essay-right 220ms ease;
+}
+
+.essay-card:has(.essay-previous:hover),
+.essay-card:has(.essay-previous:focus-visible) { --essay-left: 16px; }
+.essay-card:has(.essay-next:hover),
+.essay-card:has(.essay-next:focus-visible) { --essay-right: 16px; }
+.essay-fold-left {
+  width: var(--essay-left);
+  height: var(--essay-left);
+  transform: scaleX(-1);
+}
+.essay-fold-right {
+  width: var(--essay-right);
+  height: var(--essay-right);
+}
+
+/* The reading shelf is the inside of a cloth-bound book: a narrow oxblood
+ * spine, warm paper and page edges, with the covers resting on a fine shelf. */
+.bookshelf-paper {
+  background: linear-gradient(90deg, #6E1F24 0 5px, #D3C7B4 5px, #E2D8C7 10px, #EDE6DA 28px);
+  border-bottom: 5px double #C9BEAE;
+}
+
+.book-cover { filter: drop-shadow(3px 4px 2px rgb(42 30 24 / 18%)); }
+
+@media (min-width: 640px) {
+  .book-shelf { position: relative; }
+  .book-shelf::before {
+    content: "";
+    position: absolute;
+    top: 192px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-top: 1px solid #A89477;
+    background: linear-gradient(#C8B99F, transparent);
+  }
+}
+
+/* A continuous dark strip with small perforations along its two edges. */
+.film-strip { position: relative; background: #15120F; }
+.film-strip::before,
+.film-strip::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, #B9AD98 0 9px, transparent 9px 23px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.film-strip::before { top: 8px; }
+.film-strip::after { bottom: 8px; }
+
 @media (prefers-reduced-motion: reduce) {
   .voice-bar {
     animation: none;
   }
+  .paper-footer {
+    transition: none;
+  }
+  .paper-footer:has(a:hover),
+  .paper-footer:has(a:focus-visible) {
+    --fold: 22px;
+  }
+  .essay-card { transition: none; }
+  .essay-card:has(.essay-previous:hover),
+  .essay-card:has(.essay-previous:focus-visible) { --essay-left: 8px; }
+  .essay-card:has(.essay-next:hover),
+  .essay-card:has(.essay-next:focus-visible) { --essay-right: 8px; }
 }
