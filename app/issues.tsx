@@ -7,14 +7,67 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useState,
   useSyncExternalStore,
 } from "react";
 import { DatePill, StoryVisual } from "./issue";
 import { EASE, useTiming } from "./motion";
 import { ABOUT_HASH, issueHash, stories, type Story } from "./stories";
+import type { Book, Film } from "./personal-feeds";
+import { READING_HASH, WATCHING_HASH, GOODREADS_URL, LETTERBOXD_URL } from "./personal-links";
 
 const findStory = (hash: string) =>
   stories.find((story) => issueHash(story.slug) === hash) ?? null;
+
+/** A real link, with a short paper turn before changing the current issue. */
+function NextIssue({ href, label }: { href: string; label: string }) {
+  const { reduced } = useTiming();
+  const [turning, setTurning] = useState(false);
+  const turnRef = useRef<Animation | null>(null);
+  useEffect(() => () => turnRef.current?.cancel(), []);
+
+  return (
+    <div className="paper-footer relative flex justify-end bg-bone text-[15px] text-oxblood" data-turning={turning}>
+      <a
+        href={href}
+        data-cursor="turn the page →"
+        aria-busy={turning || undefined}
+        className="relative flex min-h-16 items-center py-4 pl-5 pr-14 underline decoration-1 underline-offset-4 hover:text-espresso focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-cobalt md:pl-8 md:pr-16"
+        onClick={async (event) => {
+          if (
+            event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
+            reduced || window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ) return;
+          const paper = event.currentTarget.closest<HTMLElement>("[role=dialog]");
+          if (!paper?.animate) return;
+          event.preventDefault();
+          if (turnRef.current) return;
+          setTurning(true);
+          const startingHash = window.location.hash;
+          const turn = paper.animate(
+            [
+              { transform: "perspective(1400px) rotateY(0deg)", opacity: 1, transformOrigin: "left center" },
+              { transform: "perspective(1400px) rotateY(-12deg) translateX(-12px)", opacity: 0, transformOrigin: "left center" },
+            ],
+            { duration: 240, easing: "ease-in", fill: "forwards" },
+          );
+          turnRef.current = turn;
+          try {
+            await turn.finished;
+          } catch {
+            return; // Closing or changing the spread cancels its pending turn.
+          }
+          if (window.location.hash !== startingHash) return;
+          history.replaceState(history.state, "", href);
+          window.dispatchEvent(new Event(HASH_EVENT));
+        }}
+      >
+        {label} →
+        <span aria-hidden="true" className="paper-fold pointer-events-none absolute bottom-0 right-0" />
+      </a>
+    </div>
+  );
+}
 
 /**
  * The shell every spread shares: a dimmed backdrop, a sheet of bone paper that
@@ -29,6 +82,7 @@ function Sheet({
   tilt,
   onClose,
   next,
+  variant = "issue",
   children,
 }: {
   id: string;
@@ -41,6 +95,7 @@ function Sheet({
   tilt: number;
   onClose: () => void;
   next: { href: string; label: string };
+  variant?: "issue" | "bookshelf" | "film";
   children: ReactNode;
 }) {
   const { timing } = useTiming();
@@ -101,14 +156,15 @@ function Sheet({
         aria-modal="true"
         aria-label={label}
         onClick={(e) => e.stopPropagation()}
-        initial={{ opacity: 0, scale: 0.8, rotate: tilt * 3, y: 60 }}
+        initial={{ opacity: 0, scale: variant === "issue" ? 0.8 : 0.96, rotate: variant === "issue" ? tilt * 3 : 0, y: variant === "issue" ? 60 : 24 }}
         animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 30 }}
         transition={timing({ type: "spring", stiffness: 260, damping: 24 })}
-        className="relative my-auto w-full max-w-[980px] bg-bone text-espresso shadow-[0_40px_80px_rgba(20,10,8,0.5)]"
+        className={`relative my-auto w-full max-w-[980px] shadow-[0_40px_80px_rgba(20,10,8,0.5)] ${variant === "film" ? "text-bone" : "text-espresso"}`}
       >
-        <div className={`flex items-center justify-between px-5 py-2.5 md:px-8 ${strip}`}>
-          <span className="font-type text-[12px] tracking-[0.2em]">{title}</span>
+        <div className={variant === "bookshelf" ? "bookshelf-paper" : variant === "film" ? "bg-[#211B17]" : "bg-bone"}>
+        <div className={`flex items-center justify-between px-5 py-2.5 md:px-8 ${variant === "issue" ? strip : ""}`}>
+          <span className={`font-type text-[12px] ${variant === "issue" ? "tracking-[0.2em]" : "opacity-65"}`}>{title}</span>
           <button
             ref={closeRef}
             type="button"
@@ -122,16 +178,13 @@ function Sheet({
         </div>
 
         {children}
-
-        <div className="flex items-center justify-end px-5 py-4 text-[15px] text-oxblood md:px-8">
-          <a
-            href={next.href}
-            data-cursor="next →"
-            className="underline decoration-1 underline-offset-4 transition-colors hover:text-espresso"
-          >
-            {next.label} →
-          </a>
+        {variant !== "issue" && (
+          <div className={`flex justify-end px-5 pb-5 pt-6 text-[14px] md:px-8 ${variant === "film" ? "text-mustard" : "text-oxblood"}`}>
+            <a href={next.href} className="underline underline-offset-4" data-cursor="take a look →">{next.label} →</a>
+          </div>
+        )}
         </div>
+        {variant === "issue" && <NextIssue href={next.href} label={next.label} />}
       </motion.article>
     </motion.div>
   );
@@ -191,6 +244,86 @@ function StorySpread({ story, onClose }: { story: Story; onClose: () => void }) 
 
       <div className="px-5 md:px-8">
         <StoryVisual story={story} />
+      </div>
+    </Sheet>
+  );
+}
+
+function PersonalSpread({
+  kind, books, films, onClose,
+}: {
+  kind: "reading" | "watching";
+  books: Book[];
+  films: Film[];
+  onClose: () => void;
+}) {
+  const reading = kind === "reading";
+  const source = reading ? GOODREADS_URL : LETTERBOXD_URL;
+  const items = reading ? books : films;
+
+  return (
+    <Sheet
+      id={kind}
+      label={reading ? "What I'm reading" : "What I'm watching"}
+      title={reading ? "bookshelf" : "film roll"}
+      strip="bg-espresso text-bone"
+      tilt={reading ? -1 : 1}
+      onClose={onClose}
+      variant={reading ? "bookshelf" : "film"}
+      next={{ href: reading ? WATCHING_HASH : READING_HASH, label: reading ? "film roll" : "bookshelf" }}
+    >
+      <div className="px-5 pb-4 pt-7 md:px-8 md:pt-9">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+          <h2 className="font-headline text-[clamp(26px,3vw,36px)] leading-tight">
+            {reading ? "currently reading" : "recently watched and rated"}
+          </h2>
+          <a href={source} target="_blank" rel="noopener noreferrer" className={`text-[14px] italic underline underline-offset-4 ${reading ? "text-cobalt" : "text-mustard"}`}>
+            {reading ? "from goodreads ↗" : "from letterboxd ↗"}
+          </a>
+        </div>
+        {!items.length ? (
+          <p className="py-12 text-[16px] leading-7">
+            the shelf is taking a moment to load. <a href={source} target="_blank" rel="noopener noreferrer" className={`underline ${reading ? "text-cobalt" : "text-mustard"}`}>see it {reading ? "on goodreads" : "on letterboxd"} ↗</a>
+          </p>
+        ) : (
+          <ul className={`mt-8 grid gap-7 sm:grid-cols-3 sm:gap-8 ${reading ? "book-shelf" : "film-strip px-4 py-7 sm:px-5 sm:py-8"}`}>
+            {items.map((item) => (
+              <li key={item.url} className="min-w-0">
+                <a href={item.url} target="_blank" rel="noopener noreferrer" data-cursor="read more ↗" className="group flex items-start gap-5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cobalt sm:block">
+                  {item.image && (
+                    <Image
+                      src={item.image}
+                      alt=""
+                      width={128}
+                      height={192}
+                      unoptimized
+                      loading="eager"
+                      className={`h-32 w-[85px] shrink-0 object-contain sm:h-48 sm:w-32 ${reading ? "book-cover object-left-bottom" : "object-left-top"}`}
+                    />
+                  )}
+                  <div className="min-w-0 sm:mt-5">
+                    <h3 className={`text-[18px] leading-6 group-hover:underline ${reading ? "group-hover:text-cobalt" : "group-hover:text-mustard"}`}>{item.title.toLowerCase()}</h3>
+                    {"author" in item ? (
+                      <p className="mt-1.5 text-[14px] italic text-espresso/75">{item.author.toLowerCase()}</p>
+                    ) : (
+                      <>
+                        <p className="mt-1.5 flex flex-wrap items-center gap-2 font-sans text-[13px] text-bone/65">
+                          {item.year}
+                          {item.rating !== null && (
+                            <span role="img" aria-label={`${item.rating} out of 5 stars`} className="text-mustard">
+                              {"★".repeat(Math.floor(item.rating))}{item.rating % 1 ? "½" : ""}
+                            </span>
+                          )}
+                        </p>
+                        {item.review && <p className="mt-3 font-sans text-[14px] leading-[22px] text-bone/85">{item.review}</p>}
+                      </>
+                    )}
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </Sheet>
   );
@@ -351,14 +484,14 @@ function subscribeToHash(onChange: () => void) {
   };
 }
 
-export function Issues() {
+export function Issues({ books, films }: { books: Book[]; films: Film[] }) {
   // The address bar is the source of truth for which spread is open.
   const hash = useSyncExternalStore(
     subscribeToHash,
     () => window.location.hash,
     () => "",
   );
-  const open = hash === ABOUT_HASH ? "about" : findStory(hash);
+  const open = hash === ABOUT_HASH ? "about" : hash === READING_HASH ? "reading" : hash === WATCHING_HASH ? "watching" : findStory(hash);
   const isOpen = open !== null;
 
   useEffect(() => {
@@ -366,11 +499,11 @@ export function Issues() {
     // adds a single entry (so Back closes it), and moving between spreads
     // replaces that entry instead of stacking more.
     const onClick = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const link = e.target instanceof Element ? e.target.closest("a") : null;
       const target = link?.getAttribute("href");
       if (!target?.startsWith("#")) return;
-      if (target !== ABOUT_HASH && !findStory(target)) return;
+      if (target !== ABOUT_HASH && target !== READING_HASH && target !== WATCHING_HASH && !findStory(target)) return;
       e.preventDefault();
       if (isOpen) history.replaceState(history.state, "", target);
       else history.pushState({ spread: true }, "", target);
@@ -395,6 +528,8 @@ export function Issues() {
     <AnimatePresence>
       {open === "about" ? (
         <AboutSpread key="spread" onClose={close} />
+      ) : open === "reading" || open === "watching" ? (
+        <PersonalSpread key="spread" kind={open} books={books} films={films} onClose={close} />
       ) : open ? (
         <StorySpread key="spread" story={open} onClose={close} />
       ) : null}
