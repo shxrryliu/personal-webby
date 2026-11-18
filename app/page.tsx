@@ -8,7 +8,9 @@ import { getBooks, getFilms } from "./personal-feeds";
 export default async function Home() {
   const [posts, books, films] = await Promise.all([getSubstackPosts(), getBooks(), getFilms()]);
   return (
-    <main className="flex min-h-screen flex-col bg-oxblood">
+    // The letter reveal moves content on reload. Keep the browser from using
+    // those animated elements as anchors and scrolling to compensate.
+    <main className="flex min-h-screen flex-col bg-oxblood [overflow-anchor:none]">
       <Cover posts={posts} />
       <Issues books={books} films={films} />
       <Grain />

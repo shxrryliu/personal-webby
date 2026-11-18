@@ -128,7 +128,11 @@ function Sheet({
     return () => {
       document.body.style.overflow = overflow;
       window.removeEventListener("keydown", onKey);
-      if (opener instanceof HTMLElement && opener.isConnected) opener.focus();
+      if (opener instanceof HTMLElement && opener.isConnected) {
+        // The portrait is taller than the viewport. Returning focus must not
+        // scroll the cover down and leave that position saved for a refresh.
+        opener.focus({ preventScroll: true });
+      }
     };
   }, [onClose]);
 
@@ -137,7 +141,7 @@ function Sheet({
   // when "next" swaps the spread inside a sheet that is already open.
   useEffect(() => {
     scrollRef.current?.scrollTo(0, 0);
-    closeRef.current?.focus();
+    closeRef.current?.focus({ preventScroll: true });
   }, [id]);
 
   return (
